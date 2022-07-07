@@ -33,6 +33,7 @@ private struct RecentlyPickedColorsButton: View {
 					recentlyPickedColors = []
 				}
 			}
+				// TODO: Remove when targeting macOS 13 where it's fixed.
 				// Without, it becomes disabled. (macOS 12.4)
 				.buttonStyle(.automatic)
 		} label: {
@@ -86,7 +87,7 @@ private struct BarView: View {
 			// Cannot do this as the `Menu` buttons don't respect it. (macOS 12.0.1)
 			// https://github.com/feedback-assistant/reports/issues/249
 //			.font(.title3)
-			.background2 {
+			.background {
 				RoundedRectangle(cornerRadius: 6, style: .continuous)
 					.fill(Color.black.opacity(colorScheme == .dark ? 0.17 : 0.05))
 			}
@@ -118,6 +119,7 @@ private struct BarView: View {
 				.labelStyle(.iconOnly)
 //				.padding(8) // Has no effect. (macOS 12.0.1)
 		}
+			// TODO: Remove when targeting macOS 13 where it's fixed.
 			.buttonStyle(.automatic) // Without, it becomes disabled: https://github.com/feedback-assistant/reports/issues/250 (macOS 12.0.1)
 			.padding(8)
 			.contentShape(.rectangle)
@@ -314,7 +316,7 @@ struct ColorPickerScreen: View {
 			.padding(9)
 			// 244 makes `HSL` always fit in the text field.
 			.frame(minWidth: 244, maxWidth: .infinity)
-			.onAppear {
+			.task {
 				updateColorsFromPanel()
 			}
 			.onChange(of: uppercaseHexColor) { _ in

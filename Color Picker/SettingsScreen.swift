@@ -56,8 +56,7 @@ private struct PreferredColorFormatSetting: View {
 
 private struct ShownColorFormatsSetting: View {
 	var body: some View {
-		HStack(alignment: .firstTextBaseline) {
-			Text("Shown color formats:")
+		Section("Shown color formats:") {
 			// TODO: Use a dropdown when SwiftUI supports multiple selections in `Picker`.
 			Defaults.MultiCheckboxPicker(
 				key: .shownColorFormats,
@@ -66,7 +65,6 @@ private struct ShownColorFormatsSetting: View {
 				Text($0.title)
 			}
 		}
-			.accessibilityElement(children: .combine)
 			.help("Choose which color formats to show in the color picker window. Disabled formats will still show up in the “Color” menu.")
 	}
 }
@@ -76,25 +74,28 @@ private struct GeneralSettings: View {
 
 	var body: some View {
 		VStack(alignment: .leading) {
-			Defaults.Toggle("Stay on top", key: .stayOnTop)
-				.help("Make the color picker window stay on top of all other windows.")
-				.padding(.bottom, 8)
-			Defaults.Toggle("Show in menu bar instead of Dock", key: .showInMenuBar)
-				.help("If you have “Keep in Dock” enabled when activating this setting, you should disable that since the Dock icon will no longer be functional.")
-			Group {
-				LaunchAtLogin.Toggle()
-					.help(showInMenuBar ? "" : "There is really no point in launching the app at login if it is not in the menu bar. You can instead just put it in the Dock and launch it when needed.")
-				HideMenuBarIconSetting()
-				MenuBarItemClickActionSetting()
+			Section {
+				Defaults.Toggle("Stay on top", key: .stayOnTop)
+					.help("Make the color picker window stay on top of all other windows.")
+					.padding(.bottom, 8)
+				Defaults.Toggle("Show in menu bar instead of Dock", key: .showInMenuBar)
+					.help("If you have “Keep in Dock” enabled when activating this setting, you should disable that since the Dock icon will no longer be functional.")
+				Group {
+					LaunchAtLogin.Toggle()
+						.help(showInMenuBar ? "" : "There is really no point in launching the app at login if it is not in the menu bar. You can instead just put it in the Dock and launch it when needed.")
+					HideMenuBarIconSetting()
+					MenuBarItemClickActionSetting()
+				}
+					.disabled(!showInMenuBar)
+					.padding(.leading, 20)
+			} footer: {
+				Button("Feedback & Support") {
+					SSApp.openSendFeedbackPage()
+				}
+					.buttonStyle(.link)
+					.padding(.top)
+					.offset(y: 20)
 			}
-				.disabled(!showInMenuBar)
-				.padding(.leading, 19)
-			Button("Feedback & Support") {
-				SSApp.openSendFeedbackPage()
-			}
-				.buttonStyle(.link)
-				.padding(.top)
-				.offset(y: 20)
 		}
 			.padding()
 			.padding()
@@ -114,7 +115,7 @@ private struct ColorSettings: View {
 				.padding()
 				.padding(.horizontal)
 			Divider()
-			VStack(alignment: .leading) {
+			Section {
 				PreferredColorFormatSetting()
 			}
 				.padding()
@@ -125,9 +126,8 @@ private struct ColorSettings: View {
 			}
 				.padding()
 				.padding(.horizontal)
-				.offset(x: 10)
 			Divider()
-			HStack {
+			Section {
 				Link("What is LCH color?", destination: "https://lea.verou.me/2020/04/lch-colors-in-css-what-why-and-how/")
 					.controlSize(.small)
 					.padding(.top)
