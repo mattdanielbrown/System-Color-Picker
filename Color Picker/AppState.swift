@@ -13,6 +13,7 @@ final class AppState: ObservableObject {
 		let colorPanel = ColorPanel()
 		colorPanel.titleVisibility = .hidden
 		colorPanel.hidesOnDeactivate = false
+		colorPanel.becomesKeyOnlyIfNeeded = false
 		colorPanel.isFloatingPanel = false
 		colorPanel.isRestorable = false
 		colorPanel.styleMask.remove(.utilityWindow)
@@ -20,8 +21,10 @@ final class AppState: ObservableObject {
 		colorPanel.standardWindowButton(.zoomButton)?.isHidden = true
 		colorPanel.tabbingMode = .disallowed
 		colorPanel.collectionBehavior = [
-			.moveToActiveSpace,
+			.canJoinAllSpaces,
 			.fullScreenAuxiliary
+			// We cannot enable tiling as then it doesn't show up in fullscreen spaces. (macOS 12.5)
+//			.fullScreenAllowsTiling
 		]
 		colorPanel.makeMain()
 
@@ -145,6 +148,8 @@ final class AppState: ObservableObject {
 
 		if Defaults[.showInMenuBar] {
 			colorPanel.close()
+		} else {
+			colorPanel.makeKeyAndOrderFront(nil)
 		}
 
 		#if DEBUG
